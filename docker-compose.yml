@@ -1,0 +1,28 @@
+version: "3"
+services:
+  redis:
+    volumes:
+      - ./data:/data
+    build: ./redis
+    networks:
+      - inner
+    restart: always
+  backend:
+    build: ./backend
+    depends_on:
+      - redis
+    networks:
+      - inner
+    restart: always
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - inner
+    restart: always
+
+networks:
+  inner:
